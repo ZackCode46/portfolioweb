@@ -1,46 +1,103 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fazila Zaki Ahmad - Portfolio</title>
-  <link rel="stylesheet" href="assets/css/style2.css">
-  <script src="assets/js/script2.js"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fazila Zaki Ahmad | Portfolio</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
-  <div class="container">
-    <header>
-      <h1>Fazila Zaki Ahmad</h1>
-      <p><strong>Enthusiast IoT, Web Development & Robotics</strong></p>
-    </header>
-
-    <section class="contact">
-      <p>📍 Depok, Jawa Barat</p>
-      <p>📧 <a href="mailto:fazilazakiahmad46@gmail.com">fazilazakiahmad46@gmail.com</a></p>
-      <p>💻 GitHub: <a href="https://github.com/zackcode46" target="_blank">zackcode46</a></p>
-      <p>🔗 LinkedIn: <a href="https://www.linkedin.com/in/fazila-zaki-1471b2335?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">Fazila Zaki</a></p>
-    </section>
-
-    <section class="skills">
-      <h2>Keahlian & Minat</h2>
-      <ul>
-        <li>Pengembangan IoT (Smart Devices, Sensor-Based Systems)</li>
-        <li>Robotika (Arduino, AI, Sensor Integration)</li>
-        <li>Web Development (HTML, CSS, JavaScript)</li>
-        <li>Game Development</li>
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">Fazila Zaki Ahmad</div>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#certificates">Certificates</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-    </section>
+    </div>
+  </header>
 
-    <section class="projects">
-      <h2>Proyek</h2>
-      <ul>
-        <li><strong>Web Pribadi</strong> – Portofolio digital menggunakan HTML, CSS, dan JavaScript</li>
-        <li><strong>Smart Garden Auto</strong> – Sistem penyiraman otomatis berbasis sensor kelembaban tanah</li>
-        <li><strong>Lampu Otomatis</strong> – Kontrol pencahayaan berbasis sensor</li>
-        <li><strong>Robot Line Follower</strong> – Robot mengikuti jalur otomatis menggunakan sensor</li>
-      </ul>
-    </section>
-  </div>
+  <section class="hero container">
+    <div class="hero-text">
+      <h1 class="fade-in">Hi, I’m Fazila Zaki</h1>
+      <p class="fade-in">IoT & Embedded Systems Enthusiast | Public Speaker | Martial Artist</p>
+      <a href="#contact" class="btn-primary fade-in">Let’s Connect</a>
+    </div>
+    <div class="hero-img fade-in">
+      <img src="assets/images/potoprofil.jpg" alt="Profile Photo">
+    </div>
+  </section>
+
+  <section id="about" class="about container fade-in">
+    <h2>About Me</h2>
+    <p>
+      I'm an aspiring Embedded Systems Engineer and IoT Architect currently pursuing my degree at Gunadarma University.
+      Passionate about combining software and hardware to build real-world solutions. My journey also includes martial
+      arts achievements and experience in public speaking.
+    </p>
+  </section>
+
+  <section id="skills" class="container fade-in">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-item">Programming</div>
+      <div class="skill-item">Graphic Design</div>
+      <div class="skill-item">Public Speaking</div>
+      <div class="skill-item">Martial Arts</div>
+      <div class="skill-item">Web & App Development</div>
+      <div class="skill-item">Cable Technician</div>
+      <div class="skill-item">Embedded Systems</div>
+      <div class="skill-item">IoT Development</div>
+    </div>
+  </section>
+
+  <section id="certificates" class="container fade-in">
+    <h2>Certificates & Achievements</h2>
+    <div class="cert-grid">
+      <div class="cert-card"><a href="#">2nd Place - National Karate Championship (Menpora CUP 2019)</a></div>
+      <div class="cert-card"><a href="#">2nd Place - Regional Karate Championship (Dandim CUP 1 2022)</a></div>
+      <div class="cert-card"><a href="#">2nd Place - National Karate +68kg (Tojoshima CUP 1 2023)</a></div>
+      <div class="cert-card"><a href="#">2nd Place - High School Debate Competition (2023)</a></div>
+    </div>
+
+    <h2>Certificate Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="assets/images/certificate1.jpg" alt="Certificate 1"></div>
+      <div class="gallery-item"><img src="assets/images/certificate2.jpg" alt="Certificate 2"></div>
+      <div class="gallery-item"><img src="assets/images/certificate3.jpg" alt="Certificate 3"></div>
+      <div class="gallery-item"><img src="assets/images/certificate4.jpg" alt="Certificate 4"></div>
+      <div class="gallery-item"><img src="assets/images/certificate5.jpg" alt="Certificate 5"></div>
+      <div class="gallery-item"><img src="assets/images/certificate6.jpg" alt="Certificate 6"></div>
+      <div class="gallery-item"><img src="assets/images/certificate7.jpg" alt="Certificate 7"></div>
+      <div class="gallery-item"><img src="assets/images/certificate8.jpg" alt="Certificate 8"></div>
+      <div class="gallery-item"><img src="assets/images/certificate9.jpg" alt="Certificate 9"></div>
+      <div class="gallery-item"><img src="assets/images/certificate10.jpg" alt="Certificate 10"></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact container fade-in">
+    <h2>Contact</h2>
+    <p>Phone: <a href="https://wa.me/089653720025">WhatsApp Me!</a></p>
+    <p>Email: <a href="mailto:fazilazakiahmad46@gmail.com">Email Me!</a></p>
+    <p>Follow me on social media for updates and collaboration!</p>
+  </section>
+
+  <footer>
+    <div class="container">
+      &copy; 2025 Fazila Zaki Ahmad | All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    ScrollReveal().reveal('.fade-in', { delay: 100, duration: 800, distance: '20px', easing: 'ease-out', origin: 'bottom' });
+  </script>
+  <script src="assets/js/scripts.js"></script>
 </body>
+
 </html>
