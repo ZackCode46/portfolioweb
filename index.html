@@ -1,103 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fazila Zaki Ahmad | Portfolio</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+
+  <!-- SEO Meta -->
+  <meta name="description" content="Fazila Zaki Ahmad Portfolio - Embedded Systems, IoT Developer, Public Speaker, Martial Artist">
+  <meta name="keywords" content="Fazila Zaki Ahmad, IoT, Embedded Systems, Portfolio, Gunadarma, Developer">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Fazila Zaki Ahmad | Portfolio">
+  <meta property="og:description" content="Explore my portfolio showcasing IoT projects, public speaking achievements, and martial arts accolades.">
+  <meta property="og:image" href="assets/images/icon.jpg">
+  <meta property="og:url" content="https://zackcode46profile.com/">
+  <meta property="og:type" content="website">
 </head>
 
 <body>
+
+  <!-- Live Background Animation -->
+  <div class="live-bg-animation" id="bg-animation"></div>
+
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container">
       <div class="logo">Fazila Zaki Ahmad</div>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#certificates">Certificates</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+      <nav>
+        <div class="nav-toggle" id="navToggle">&#9776;</div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#certificates">Certificates</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <section class="hero container">
+  <!-- Hero Section -->
+  <section class="hero" id="home">
     <div class="hero-text">
-      <h1 class="fade-in">Hi, I’m Fazila Zaki</h1>
-      <p class="fade-in">IoT & Embedded Systems Enthusiast | Public Speaker | Martial Artist</p>
-      <a href="#contact" class="btn-primary fade-in">Let’s Connect</a>
+      <h1>Port <br> folio!</h1>
+      <p>I'm a passionate Computer Engineering student at Gunadarma University, focusing on IoT, Embedded Systems, and Web Development.</p>
+      <div class="stats">
+        <div><strong>6+</strong><br>Projects</div>
+        <div><strong>1+</strong><br>Years Learning</div>
+        <div><strong>2+</strong><br>Skills Mastered</div>
+      </div>
     </div>
-    <div class="hero-img fade-in">
-      <img src="assets/images/potoprofil.jpg" alt="Profile Photo">
+    <div class="hero-image">
+      <img src="assets/images/fazilazaki.png" alt="Fazila Zaki">
+      <div class="tag emas">IoT & Embedded System Technician</div>
+      <div class="tag merah-maroon">UI/UX Designer & Web Developer</div>
+    </div>
+    <!-- Decorative Wave -->
+    <div class="wave-bg"></div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="section container fade-in">
+    <h2>My Projects</h2>
+    <div class="project-grid">
+
+      <div class="project-card">
+        <img src="assets/images/prototype.jpg" alt="Smart Garden IoT" class="project-img">
+        <div class="project-info">
+          <h3>Smart Garden System</h3>
+          <p>An IoT-based system that monitors plant health using sensors and automates watering via ESP + RTC.</p>
+          <a href="https://github.com/yourusername/smart-garden" class="btn-secondary" target="_blank">View on Blogger</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="assets/images/smartechgarden.jpg" alt="Portfolio App" class="project-img">
+        <div class="project-info">
+          <h3>Smartech Garden Web App</h3>
+          <p>Smartech Garden is an innovative web app designed to monitor and manage plant conditions automatically using sensors, supporting smart and efficient agriculture.</p>
+          <a href="https://zackcode46.github.io/smartechgarden/#features" class="btn-secondary" target="_blank">View on Smartech Garden Web</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <section id="about" class="about container fade-in">
-    <h2>About Me</h2>
-    <p>
-      I'm an aspiring Embedded Systems Engineer and IoT Architect currently pursuing my degree at Gunadarma University.
-      Passionate about combining software and hardware to build real-world solutions. My journey also includes martial
-      arts achievements and experience in public speaking.
-    </p>
-  </section>
-
-  <section id="skills" class="container fade-in">
-    <h2>Skills</h2>
-    <div class="skills-grid">
-      <div class="skill-item">Programming</div>
-      <div class="skill-item">Graphic Design</div>
-      <div class="skill-item">Public Speaking</div>
-      <div class="skill-item">Martial Arts</div>
-      <div class="skill-item">Web & App Development</div>
-      <div class="skill-item">Cable Technician</div>
-      <div class="skill-item">Embedded Systems</div>
-      <div class="skill-item">IoT Development</div>
+  <!-- Skills Section -->
+  <section id="skills" class="section container">
+  <h2>Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-item">
+      <img src="assets/images/C++.png" alt="C++">
+      <span>C++</span>
     </div>
-  </section>
+    <div class="skill-item">
+      <img src="assets/images/html.jpeg" alt="HTML">
+      <span>HTML</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/css.jpeg" alt="CSS">
+      <span>CSS</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/js.jpeg" alt="JavaScript">
+      <span>JavaScript</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/dart.png" alt="Dart">
+      <span>Dart</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/flutter.jpg" alt="Flutter">
+      <span>Flutter</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/canva.jpeg" alt="Canva">
+      <span>Canva</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/figma.png" alt="Figma">
+      <span>Figma</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/adobe.png" alt="Adobe">
+      <span>Adobe</span>
+    </div>
+    <div class="skill-item">
+      <img src="assets/images/Inkscape.jpeg" alt="Inkscape">
+      <span>Inkscape</span>
+    </div>
+  </div>
+</section>
 
-  <section id="certificates" class="container fade-in">
+  <!-- Certificates Section -->
+  <section id="certificates" class="section container">
     <h2>Certificates & Achievements</h2>
     <div class="cert-grid">
-      <div class="cert-card"><a href="#">2nd Place - National Karate Championship (Menpora CUP 2019)</a></div>
-      <div class="cert-card"><a href="#">2nd Place - Regional Karate Championship (Dandim CUP 1 2022)</a></div>
-      <div class="cert-card"><a href="#">2nd Place - National Karate +68kg (Tojoshima CUP 1 2023)</a></div>
-      <div class="cert-card"><a href="#">2nd Place - High School Debate Competition (2023)</a></div>
-    </div>
-
-    <h2>Certificate Gallery</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item"><img src="assets/images/certificate1.jpg" alt="Certificate 1"></div>
-      <div class="gallery-item"><img src="assets/images/certificate2.jpg" alt="Certificate 2"></div>
-      <div class="gallery-item"><img src="assets/images/certificate3.jpg" alt="Certificate 3"></div>
-      <div class="gallery-item"><img src="assets/images/certificate4.jpg" alt="Certificate 4"></div>
-      <div class="gallery-item"><img src="assets/images/certificate5.jpg" alt="Certificate 5"></div>
-      <div class="gallery-item"><img src="assets/images/certificate6.jpg" alt="Certificate 6"></div>
-      <div class="gallery-item"><img src="assets/images/certificate7.jpg" alt="Certificate 7"></div>
-      <div class="gallery-item"><img src="assets/images/certificate8.jpg" alt="Certificate 8"></div>
-      <div class="gallery-item"><img src="assets/images/certificate9.jpg" alt="Certificate 9"></div>
-      <div class="gallery-item"><img src="assets/images/certificate10.jpg" alt="Certificate 10"></div>
+      <div class="cert-card">
+        <img src="assets/images/sertif_karate2019.jpg" alt="Menpora CUP 2019" class="cert-img">
+        <p>2nd Place - Menpora CUP 2019</p>
+      </div>
+      <div class="cert-card">
+        <img src="assets/images/sertif_karate2021.jpg" alt="Dandim CUP 1 2022" class="cert-img">
+        <p>2nd Place - Dandim CUP 1 2022</p>
+      </div>
+      <div class="cert-card">
+        <img src="assets/images/sertif_karate2023.jpg" alt="Tojoshima CUP 2023" class="cert-img">
+        <p>2nd Place - Tojoshima CUP 1 2023</p>
+      </div>
+      <div class="cert-card">
+        <img src="assets/images/sertif_moderator.jpg" alt="Moderator" class="cert-img">
+        <p>Moderator Hut Hima Teknik Komputer</p>
+      </div>
     </div>
   </section>
 
-  <section id="contact" class="contact container fade-in">
-    <h2>Contact</h2>
-    <p>Phone: <a href="https://wa.me/089653720025">WhatsApp Me!</a></p>
+  <!-- Contact Section -->
+  <section id="contact" class="section container">
+    <h2>Contact Me</h2>
+    <p>Phone: <a href="https://wa.me/089653720025" target="_blank">WhatsApp Me!</a></p>
     <p>Email: <a href="mailto:fazilazakiahmad46@gmail.com">Email Me!</a></p>
-    <p>Follow me on social media for updates and collaboration!</p>
+
+    <div class="social-media-buttons">
+      <a href="https://github.com/yourusername" target="_blank" class="social-btn">
+        <img src="assets/images/github_icon.png" alt="GitHub">
+      </a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="social-btn">
+        <img src="assets/images/linkedln_icon.png" alt="LinkedIn">
+      </a>
+      <a href="https://instagram.com/yourusername" target="_blank" class="social-btn">
+        <img src="assets/images/instagram_icon.jpg" alt="Instagram">
+      </a>
+      <a href="https://twitter.com/yourusername" target="_blank" class="social-btn">
+        <img src="assets/images/twitter_icon.png" alt="Twitter">
+      </a>
+    </div>
   </section>
 
-  <footer>
+  <!-- Footer -->
+  <footer class="footer">
     <div class="container">
-      &copy; 2025 Fazila Zaki Ahmad | All rights reserved.
+      <p>&copy; 2025 Fazila Zaki Ahmad | All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="https://unpkg.com/scrollreveal"></script>
-  <script>
-    ScrollReveal().reveal('.fade-in', { delay: 100, duration: 800, distance: '20px', easing: 'ease-out', origin: 'bottom' });
-  </script>
-  <script src="assets/js/scripts.js"></script>
-</body>
+  <!-- Back to Top Button -->
+  <a href="#home" class="back-to-top">↑</a>
 
+  <!-- Script -->
+  <script src="assets/js/script.js"></script>
+</body>
 </html>
