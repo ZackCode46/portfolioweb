@@ -1,511 +1,87 @@
-/* ============================================================
-   GLOBAL STATE & CONFIGURATION
-   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  // Navbar Toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
 
-// Global state object
-const APP_STATE = {
-    isMobile: false,
-    isUserActive: true,
-    lastInteractionTime: Date.now(),
-    autoScrollSpeed: 0.4,
-    autoScrollPaused: false,
-    detectedDevicePerformance: 'medium',
-    focusSection: null,
-    aiModeEnabled: true
-};
+  // Typing Animation
 
-// DOM Cache
-const DOM = {
-    body: document.body,
-    navbar: document.querySelector('.navbar'),
-    mobilePanel: document.querySelector('.mobile-panel'),
-    projectsScroll: document.querySelector('.projects-scroll'),
-    organizationScroll: document.querySelector('.organization-scroll')
-};
+const heroText = document.querySelector('.hero-text h1');
+const originalHTML = heroText.innerHTML.replace(/\n/g, "<br>"); // preserve <br>
+const cleanText = heroText.innerText.trim();
 
-/* ============================================================
-   DEVICE & PERFORMANCE DETECTION (AI BASE)
-   ============================================================ */
+heroText.innerHTML = "Hi👋😄, I'm Fazila Zaki, Welcome to my"; // kosongin isi dulu
 
-// Detect mobile device
-function detectMobileDevice() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    if (width <= 768 || /Mobi|Android/i.test(navigator.userAgent)) {
-        APP_STATE.isMobile = true;
-    } else {
-        APP_STATE.isMobile = false;
-    }
-}
-
-// Detect performance capability (simple heuristic)
-function detectPerformanceLevel() {
-    const memory = navigator.deviceMemory || 4;
-    const cores = navigator.hardwareConcurrency || 4;
-
-    if (memory <= 2 || cores <= 2) {
-        APP_STATE.detectedDevicePerformance = 'low';
-        APP_STATE.autoScrollSpeed = 0.25;
-    } 
-    else if (memory <= 4 || cores <= 4) {
-        APP_STATE.detectedDevicePerformance = 'medium';
-        APP_STATE.autoScrollSpeed = 0.4;
-    } 
-    else {
-        APP_STATE.detectedDevicePerformance = 'high';
-        APP_STATE.autoScrollSpeed = 0.6;
-    }
-}
-
-/* ============================================================
-   USER ACTIVITY & AI BEHAVIOR TRACKING
-   ============================================================ */
-
-// Track user interaction
-function registerUserActivity() {
-    APP_STATE.lastInteractionTime = Date.now();
-    APP_STATE.isUserActive = true;
-}
-
-// Monitor inactivity
-function monitorUserInactivity() {
-    setInterval(() => {
-        const idleTime = Date.now() - APP_STATE.lastInteractionTime;
-
-        if (idleTime > 6000) {
-            APP_STATE.isUserActive = false;
-        }
-    }, 1000);
-}
-
-// Adaptive AI behavior loop
-function aiBehaviorController() {
-    setInterval(() => {
-
-        if (!APP_STATE.aiModeEnabled) return;
-
-        // Slow down animations when inactive
-        if (!APP_STATE.isUserActive) {
-            APP_STATE.autoScrollSpeed *= 0.98;
-            if (APP_STATE.autoScrollSpeed < 0.15) {
-                APP_STATE.autoScrollSpeed = 0.15;
-            }
-        }
-
-        // Speed up when user active
-        if (APP_STATE.isUserActive) {
-            APP_STATE.autoScrollSpeed += 0.01;
-            if (APP_STATE.autoScrollSpeed > 0.6) {
-                APP_STATE.autoScrollSpeed = 0.6;
-            }
-        }
-
-    }, 2000);
-}
-
-/* ============================================================
-   AUTO HORIZONTAL SCROLL SYSTEM
-   ============================================================ */
-
-// Core auto-scroll function
-function startAutoScroll(container) {
-
-    if (!container) return;
-
-    let direction = 1;
-
-    function scrollLoop() {
-
-        if (APP_STATE.autoScrollPaused) {
-            requestAnimationFrame(scrollLoop);
-            return;
-        }
-
-        container.scrollLeft += APP_STATE.autoScrollSpeed * direction;
-
-        // Reverse direction at edges
-        if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-            direction = -1;
-        }
-
-        if (container.scrollLeft <= 0) {
-            direction = 1;
-        }
-
-        requestAnimationFrame(scrollLoop);
-    }
-
-    scrollLoop();
-}
-
-// Pause auto scroll on interaction
-function enableScrollPauseOnInteraction(container) {
-    if (!container) return;
-
-    container.addEventListener('mouseenter', () => {
-        APP_STATE.autoScrollPaused = true;
-    });
-
-    container.addEventListener('mouseleave', () => {
-        APP_STATE.autoScrollPaused = false;
-        registerUserActivity();
-    });
-
-    container.addEventListener('touchstart', () => {
-        APP_STATE.autoScrollPaused = true;
-    });
-
-    container.addEventListener('touchend', () => {
-        APP_STATE.autoScrollPaused = false;
-        registerUserActivity();
-    });
-
-    container.addEventListener('wheel', () => {
-        APP_STATE.autoScrollPaused = true;
-        registerUserActivity();
-    });
-}
-
-/* ============================================================
-   CLICK / FLIP INTERACTION SYSTEM
-   ============================================================ */
-
-// Flip card effect
-function enableCardFlipEffect() {
-
-    const cards = document.querySelectorAll('.project-card, .organization-card');
-
-    cards.forEach(card => {
-
-        card.addEventListener('click', () => {
-
-            card.classList.toggle('active');
-
-            registerUserActivity();
-        });
-
-    });
-}
-
-/* ============================================================
-   MOBILE PANEL CONTROLLER
-   ============================================================ */
-
-function toggleMobilePanel() {
-
-    if (!DOM.mobilePanel) return;
-
-    DOM.mobilePanel.classList.toggle('active');
-
-    registerUserActivity();
-}
-
-// Close mobile panel on link click
-function autoCloseMobilePanel() {
-
-    const links = document.querySelectorAll('.mobile-panel a');
-
-    links.forEach(link => {
-        link.addEventListener('click', () => {
-            DOM.mobilePanel.classList.remove('active');
-        });
-    });
-}
-
-/* ============================================================
-   SMART SCROLL & SECTION FOCUS (AI STYLE)
-   ============================================================ */
-
-// Detect focused section
-function detectFocusedSection() {
-
-    const sections = document.querySelectorAll('section');
-
-    let closestSection = null;
-    let closestDistance = Infinity;
-
-    sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        const distance = Math.abs(rect.top);
-
-        if (distance < closestDistance) {
-            closestDistance = distance;
-            closestSection = section;
-        }
-    });
-
-    APP_STATE.focusSection = closestSection;
-}
-
-// Adaptive navbar behavior
-function adaptiveNavbar() {
-
-    if (!DOM.navbar) return;
-
-    if (APP_STATE.focusSection && APP_STATE.focusSection.classList.contains('hero')) {
-        DOM.navbar.style.background = 'rgba(11,15,25,0.4)';
-    } else {
-        DOM.navbar.style.background = 'rgba(11,15,25,0.85)';
-    }
-}
-
-/* ============================================================
-   SCROLL EVENT HANDLING
-   ============================================================ */
-
-window.addEventListener('scroll', () => {
-
-    registerUserActivity();
-    detectFocusedSection();
-    adaptiveNavbar();
-
+[...cleanText].forEach((char, i) => {
+  const span = document.createElement("span");
+  span.textContent = char;
+  span.style.animationDelay = `${i * 0.05}s`;
+  span.classList.add("wave-letter");
+  heroText.appendChild(span);
 });
 
-/* ============================================================
-   RESIZE EVENT HANDLING
-   ============================================================ */
+  // Fade In on Scroll
+  const faders = document.querySelectorAll('.fade-in');
+  const appearOptions = {
+    threshold: 0.2,
+    rootMargin: "0px 0px -100px 0px"
+  };
 
-window.addEventListener('resize', () => {
-    detectMobileDevice();
-});
+  const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('appear');
+      observer.unobserve(entry.target);
+    });
+  }, appearOptions);
 
-/* ============================================================
-   INIT SEQUENCE
-   ============================================================ */
+  faders.forEach(fader => {
+    appearOnScroll.observe(fader);
+  });
 
-function initApplication() {
+  // Project Card Hover
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
 
-    // Detect environment
-    detectMobileDevice();
-    detectPerformanceLevel();
-
-    // Start AI systems
-    monitorUserInactivity();
-    aiBehaviorController();
-
-    // Enable auto scroll
-    startAutoScroll(DOM.projectsScroll);
-    startAutoScroll(DOM.organizationScroll);
-
-    // Interaction handlers
-    enableScrollPauseOnInteraction(DOM.projectsScroll);
-    enableScrollPauseOnInteraction(DOM.organizationScroll);
-
-    enableCardFlipEffect();
-    autoCloseMobilePanel();
-
-    console.log('✅ App initialized with AI behavior');
-}
-
-// Run app
-document.addEventListener('DOMContentLoaded', initApplication);
-
-/* ============================================================
-   EXTRA FILLER LOGIC (INTENTIONAL – BIAR BARIS PANJANG)
-   ============================================================ */
-
-// Dummy observer (future-ready)
-function futureObserverSystem() {
-    // reserved for expansion
-}
-
-// Experimental animation regulator
-function animationRegulator() {
-    // reserved
-}
-/* ============================================================
-   AUTO SCROLL SMART ENGINE
-============================================================ */
-function autoScroll(container, speed = 0.3) {
-  let paused = false;
-  let userInteracting = false;
-
-  container.addEventListener("mouseenter", () => paused = true, { passive: true });
-  container.addEventListener("mouseleave", () => paused = false, { passive: true });
-
-  container.addEventListener("touchstart", () => {
-    paused = true;
-    userInteracting = true;
-  }, { passive: true });
-
-  container.addEventListener("touchend", () => {
-    setTimeout(() => {
-      paused = false;
-      userInteracting = false;
-    }, 1200);
-  }, { passive: true });
-
-  function loop() {
-    if (!paused && !userInteracting) {
-      container.scrollLeft += speed;
-      if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-        container.scrollLeft = 0;
-      }
-    }
-    requestAnimationFrame(loop);
+  // Parallax Background
+  const bg = document.getElementById('bg-animation');
+  if (bg) {
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth - 0.5;
+      const y = e.clientY / window.innerHeight - 0.5;
+      bg.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+    });
   }
 
-  loop();
-}
+// === CUSTOM RING CURSOR ===
+const cursor = document.createElement("div");
+cursor.classList.add("custom-cursor");
+document.body.appendChild(cursor);
 
-document.querySelectorAll(".project-grid, .flip-card-container")
-  .forEach(el => autoScroll(el));
-
-/* ============================================================
-   AI UX ENGINE (USER BEHAVIOR PREDICTION)
-============================================================ */
-let scrollEvents = [];
-let lastScroll = performance.now();
-
-window.addEventListener("scroll", () => {
-  const now = performance.now();
-  scrollEvents.push(now - lastScroll);
-  lastScroll = now;
-
-  if (scrollEvents.length > 20) scrollEvents.shift();
-}, { passive: true });
-
-function getUserScrollStyle() {
-  if (scrollEvents.length < 5) return "normal";
-  const avg = scrollEvents.reduce((a,b)=>a+b,0) / scrollEvents.length;
-
-  if (avg < 40) return "fast";
-  if (avg > 120) return "slow";
-  return "normal";
-}
-
-/* adapt UI */
-setInterval(() => {
-  const style = getUserScrollStyle();
-
-  document.documentElement.style.setProperty(
-    "--motion-mid",
-    style === "fast" ? "0.4s" : style === "slow" ? "1.2s" : "0.8s"
-  );
-}, 1500);
-
-/* ============================================================
-   LIGHTHOUSE TUNING
-============================================================ */
-
-/* passive listeners already used */
-/* layout shift prevention */
-window.addEventListener("load", () => {
-  document.body.classList.add("loaded");
+// Update posisi kursor mengikuti mouse
+document.addEventListener("mousemove", (e) => {
+  cursor.style.left = `${e.clientX}px`;
+  cursor.style.top = `${e.clientY}px`;
 });
 
-// Placeholder AI hook
-function experimentalAIHook() {
-    // reserved
-}
-/* ============================================================
-   AI SCROLL HEATMAP (LIGHTWEIGHT)
-============================================================ */
+// Hover interaktif (membesar saat di atas link atau button)
+const interactiveElements = document.querySelectorAll("a, button, .btn, .btn-secondary");
 
-const heatmapData = [];
-const viewportHeight = window.innerHeight;
-
-window.addEventListener("scroll", () => {
-  const scrollY = window.scrollY;
-  const section = Math.floor(scrollY / viewportHeight);
-
-  heatmapData[section] = (heatmapData[section] || 0) + 1;
-}, { passive: true });
-
-/* expose data for AI UX */
-window.__USER_HEATMAP__ = heatmapData;
-/* ============================================================
-   AI PREDICTIVE PRELOAD
-============================================================ */
-
-function preloadImages(selector) {
-  document.querySelectorAll(selector).forEach(img => {
-    if (!img.dataset.preloaded) {
-      const i = new Image();
-      i.src = img.src;
-      img.dataset.preloaded = "true";
-    }
+interactiveElements.forEach(el => {
+  el.addEventListener("mouseenter", () => {
+    cursor.classList.add("cursor-hover");
   });
-}
-
-setInterval(() => {
-  const heatmap = window.__USER_HEATMAP__ || [];
-  const maxIndex = heatmap.indexOf(Math.max(...heatmap));
-
-  /* preload next section based on interest */
-  if (maxIndex === 1) preloadImages("#projects img");
-  if (maxIndex === 2) preloadImages("#organization img");
-  if (maxIndex === 3) preloadImages("#certificates img");
-}, 3000);
-/* ============================================================
-   GESTURE INERTIA (iOS-LIKE)
-============================================================ */
-
-function inertiaScroll(container) {
-  let velocity = 0;
-  let lastX = 0;
-  let pressed = false;
-
-  container.addEventListener("pointerdown", e => {
-    pressed = true;
-    velocity = 0;
-    lastX = e.clientX;
-    container.setPointerCapture(e.pointerId);
+  el.addEventListener("mouseleave", () => {
+    cursor.classList.remove("cursor-hover");
   });
-
-  container.addEventListener("pointermove", e => {
-    if (!pressed) return;
-    const dx = lastX - e.clientX;
-    velocity = dx;
-    container.scrollLeft += dx;
-    lastX = e.clientX;
-  });
-
-  container.addEventListener("pointerup", () => {
-    pressed = false;
-    (function momentum() {
-      if (Math.abs(velocity) < 0.3) return;
-      container.scrollLeft += velocity;
-      velocity *= 0.95;
-      requestAnimationFrame(momentum);
-    })();
-  });
-}
-
-document.querySelectorAll(".project-grid, .flip-card-container")
-  .forEach(el => inertiaScroll(el));
-/* ============================================================
-   AI THEME AUTO ADAPT
-============================================================ */
-
-function applyTheme() {
-  const hour = new Date().getHours();
-  const root = document.documentElement;
-
-  if (hour >= 6 && hour < 17) {
-    /* DAY */
-    root.style.setProperty("--bg", "#f7f9fb");
-    root.style.setProperty("--text", "#0b0b0b");
-    root.style.setProperty("--card", "#ffffff");
-  } else {
-    /* NIGHT */
-    root.style.setProperty("--bg", "#0d1117");
-    root.style.setProperty("--text", "#e6edf3");
-    root.style.setProperty("--card", "#161b22");
-  }
-}
-
-applyTheme();
-setInterval(applyTheme, 60000);
-/* ============================================================
-   MICRO PARALLAX (GPU SAFE)
-============================================================ */
-
-window.addEventListener("scroll", () => {
-  const y = window.scrollY * 0.08;
-  document.querySelector(".hero-image img")?.style.setProperty(
-    "transform",
-    `translateY(${y}px)`
-  );
-}, { passive: true });
+});
+})
