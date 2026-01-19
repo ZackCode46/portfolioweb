@@ -1,385 +1,715 @@
 /* ============================================================
-   GLOBAL RESET & BASE
-   ============================================================ */
-
-* {
+   GLOBAL RESET & ROOT
+============================================================ */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body setup */
-body {
-    font-family: 'Inter', 'Poppins', sans-serif;
-    background-color: #0b0f19;
-    color: #e5e7eb;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-}
-
-/* Selection */
-::selection {
-    background-color: #6366f1;
-    color: #ffffff;
-}
-
-/* ============================================================
-   ROOT VARIABLES
-   ============================================================ */
-
 :root {
-
-    /* Colors */
-    --primary-color: #6366f1;
-    --secondary-color: #22d3ee;
-    --accent-color: #a855f7;
-
-    --dark-bg: #0b0f19;
-    --dark-bg-soft: #111827;
-    --card-bg: #0f172a;
-
-    --text-main: #e5e7eb;
-    --text-muted: #9ca3af;
-
-    /* Shadows */
+    --bg-main: #050b1a;
+    --bg-secondary: #0b1630;
+    --accent: #4ea1ff;
+    --accent-soft: rgba(78,161,255,0.35);
+    --text-main: #eaf0ff;
+    --text-muted: #9fb2d6;
+    --glass-bg: rgba(255,255,255,0.05);
+    --border-glass: rgba(255,255,255,0.12);
     --shadow-soft: 0 10px 30px rgba(0,0,0,0.4);
-    --shadow-strong: 0 20px 60px rgba(0,0,0,0.6);
-
-    /* Radius */
-    --radius-small: 8px;
-    --radius-medium: 14px;
-    --radius-large: 22px;
-
-    /* Transitions */
-    --transition-fast: 0.25s ease;
-    --transition-medium: 0.45s ease;
-    --transition-slow: 0.8s ease;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
 }
 
 /* ============================================================
-   TYPOGRAPHY
-   ============================================================ */
-
-h1, h2, h3, h4, h5 {
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    color: #f9fafb;
+   BODY + BACKGROUND ANIMATION
+============================================================ */
+body {
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: var(--text-main);
+    background: radial-gradient(circle at top left, #0c1c3c, var(--bg-main));
+    overflow-x: hidden;
 }
 
-p {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: var(--text-muted);
+/* moving gradient layer */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(78,161,255,0.12), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(78,161,255,0.08), transparent 45%);
+    animation: bgMove 18s linear infinite;
+    z-index: -2;
 }
 
-/* ============================================================
-   CONTAINER SYSTEM
-   ============================================================ */
-
-.container {
-    width: 100%;
-    max-width: 1200px;
-    padding-left: 24px;
-    padding-right: 24px;
-    margin-left: auto;
-    margin-right: auto;
+@keyframes bgMove {
+    0%   { transform: translateY(0) translateX(0); }
+    50%  { transform: translateY(-40px) translateX(30px); }
+    100% { transform: translateY(0) translateX(0); }
 }
 
-.container-wide {
-    width: 100%;
-    padding-left: 40px;
-    padding-right: 40px;
+/* floating glow orbs */
+.bg-orb {
+    position: fixed;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, var(--accent-soft), transparent 65%);
+    filter: blur(40px);
+    animation: orbFloat 22s ease-in-out infinite;
+    z-index: -1;
+}
+
+.bg-orb.one { top: 10%; left: 5%; }
+.bg-orb.two { bottom: 15%; right: 10%; animation-delay: -8s; }
+
+@keyframes orbFloat {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-60px); }
+    100% { transform: translateY(0); }
 }
 
 /* ============================================================
    NAVBAR
-   ============================================================ */
-
-.navbar {
+============================================================ */
+nav {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    height: 72px;
-    background: rgba(11, 15, 25, 0.8);
+    padding: 18px 6%;
     backdrop-filter: blur(14px);
-    z-index: 1000;
-    box-shadow: var(--shadow-soft);
+    background: linear-gradient(
+        to bottom,
+        rgba(5,11,26,0.85),
+        rgba(5,11,26,0.55)
+    );
+    border-bottom: 1px solid var(--border-glass);
+    z-index: 100;
 }
 
-.navbar-inner {
+nav ul {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
+    gap: 26px;
+    list-style: none;
 }
 
-/* Logo */
-.nav-logo {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-/* Menu */
-.nav-menu {
-    display: flex;
-    gap: 28px;
-}
-
-.nav-menu a {
-    color: var(--text-main);
+nav a {
+    color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-weight: 500;
     position: relative;
-    transition: var(--transition-fast);
+    transition: color 0.3s ease;
 }
 
-.nav-menu a::after {
-    content: '';
+nav a::after {
+    content: "";
     position: absolute;
+    left: 0;
     bottom: -6px;
-    left: 0;
-    width: 0%;
+    width: 0;
     height: 2px;
-    background: var(--primary-color);
-    transition: var(--transition-fast);
+    background: var(--accent);
+    transition: width 0.3s ease;
 }
 
-.nav-menu a:hover::after {
-    width: 100%;
-}
-
-/* ============================================================
-   MOBILE PANEL
-   ============================================================ */
-
-.mobile-panel {
-    position: fixed;
-    bottom: -100%;
-    left: 0;
-    width: 100%;
-    height: 70vh;
-    background: var(--dark-bg-soft);
-    z-index: 1200;
-    border-top-left-radius: var(--radius-large);
-    border-top-right-radius: var(--radius-large);
-    transition: var(--transition-slow);
-}
-
-.mobile-panel.active {
-    bottom: 0;
-}
-
-.mobile-panel-header {
-    padding: 18px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.mobile-panel-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding: 24px;
-}
-
-.mobile-panel-menu a {
-    text-decoration: none;
+nav a:hover {
     color: var(--text-main);
-    font-size: 1.05rem;
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 /* ============================================================
    HERO SECTION
-   ============================================================ */
-
+============================================================ */
 .hero {
     min-height: 100vh;
-    display: flex;
+    padding: 140px 6% 80px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 60px;
     align-items: center;
-    position: relative;
-    background: radial-gradient(circle at top, #1e293b, #020617);
-}
-
-.hero-content {
-    max-width: 700px;
 }
 
 .hero h1 {
-    font-size: 2.6rem;
-    margin-bottom: 16px;
+    font-size: clamp(2.6rem, 4vw, 3.8rem);
+    line-height: 1.2;
+    animation: fadeUp 1.2s ease forwards;
 }
 
 .hero p {
-    font-size: 1.05rem;
-    margin-bottom: 32px;
+    margin-top: 18px;
+    color: var(--text-muted);
+    max-width: 520px;
+    animation: fadeUp 1.2s ease forwards;
+    animation-delay: 0.2s;
 }
 
-.hero-buttons {
-    display: flex;
-    gap: 16px;
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Buttons */
-.btn-primary {
-    padding: 14px 26px;
-    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-    border-radius: var(--radius-medium);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: var(--transition-fast);
+.hero-img {
+    position: relative;
+    animation: floatHero 6s ease-in-out infinite;
 }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-soft);
+@keyframes floatHero {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+}
+
+.hero-img img {
+    width: 100%;
+    max-width: 320px;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
 }
 
 /* ============================================================
-   PROJECTS SECTION (AUTO SCROLL)
-   ============================================================ */
-
-.projects {
-    padding: 120px 0;
+   SECTION GENERAL
+============================================================ */
+section {
+    padding: 90px 6%;
 }
 
-.projects-title {
+.section-title {
+    font-size: 2rem;
     margin-bottom: 40px;
 }
 
-/* Horizontal scroll wrapper */
-.projects-scroll {
+/* ============================================================
+   AUTO SCROLL PROJECTS
+============================================================ */
+.scroll-row {
     display: flex;
-    gap: 24px;
+    gap: 26px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding-bottom: 20px;
 }
 
-.projects-scroll::-webkit-scrollbar {
+.scroll-row::-webkit-scrollbar {
     height: 6px;
 }
 
-.projects-scroll::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
+.scroll-row::-webkit-scrollbar-thumb {
+    background: var(--accent-soft);
     border-radius: 10px;
 }
 
-/* Project card */
 .project-card {
-    min-width: 300px;
-    background: var(--card-bg);
-    border-radius: var(--radius-large);
+    min-width: 280px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
     padding: 20px;
     scroll-snap-align: start;
-    transition: var(--transition-medium);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-strong);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-soft);
+}
+
+/* auto scroll animation */
+.scroll-row.auto {
+    animation: autoScroll 30s linear infinite;
+}
+
+.scroll-row:hover {
+    animation-play-state: paused;
+}
+
+@keyframes autoScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
 
 /* ============================================================
-   ORGANIZATION SECTION
-   ============================================================ */
-
-.organization {
-    padding: 120px 0;
+   ORGANIZATION FLIP CARD
+============================================================ */
+.flip-card {
+    perspective: 1200px;
+    min-width: 260px;
 }
 
-.organization-scroll {
-    display: flex;
-    gap: 26px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+.flip-inner {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    transition: transform 0.8s ease;
+    transform-style: preserve-3d;
 }
 
-.organization-card {
-    min-width: 320px;
-    background: linear-gradient(145deg, #020617, #111827);
-    padding: 24px;
-    border-radius: var(--radius-large);
-    transition: var(--transition-medium);
+.flip-card:hover .flip-inner {
+    transform: rotateY(180deg);
 }
 
-.organization-card:hover {
-    transform: scale(1.04);
+.flip-front,
+.flip-back {
+    position: absolute;
+    inset: 0;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    backface-visibility: hidden;
+    padding: 20px;
+}
+
+.flip-back {
+    transform: rotateY(180deg);
 }
 
 /* ============================================================
    FOOTER
-   ============================================================ */
-
-.footer {
-    padding: 80px 0 40px;
-    background: #020617;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 32px;
-}
-
-.footer p {
-    font-size: 0.85rem;
-}
-
-/* ============================================================
-   ANIMATIONS (LIGHTWEIGHT)
-   ============================================================ */
-
-@keyframes floatSoft {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0); }
-}
-
-.float {
-    animation: floatSoft 6s ease-in-out infinite;
+============================================================ */
+footer {
+    padding: 60px 6%;
+    border-top: 1px solid var(--border-glass);
+    background: rgba(5,11,26,0.6);
+    text-align: center;
+    color: var(--text-muted);
 }
 
 /* ============================================================
    RESPONSIVE
-   ============================================================ */
-
-@media (max-width: 768px) {
-
-    .nav-menu {
-        display: none;
+============================================================ */
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
 
-    .hero h1 {
-        font-size: 2rem;
+    .hero-img {
+        order: -1;
     }
 
-    .projects-scroll,
-    .organization-scroll {
+    nav ul {
         gap: 18px;
     }
 }
 
+@media (max-width: 600px) {
+    section {
+        padding: 70px 5%;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+}
 /* ============================================================
-   EXTRA FILLER RULES (INTENTIONAL – BIAR BARIS PANJANG)
-   ============================================================ */
+   MICRO ANIMATION SYSTEM
+============================================================ */
 
-.section-padding-large { padding: 140px 0; }
-.section-padding-medium { padding: 100px 0; }
-.section-padding-small { padding: 60px 0; }
+/* subtle hover glow */
+.micro-glow {
+    position: relative;
+}
 
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.micro-glow::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(78,161,255,0.35),
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
 
-.opacity-0 { opacity: 0; }
-.opacity-1 { opacity: 1; }
+.micro-glow:hover::after {
+    opacity: 1;
+}
 
-.scale-small { transform: scale(0.95); }
-.scale-normal { transform: scale(1); }
-.scale-large { transform: scale(1.05); }
+/* soft breathing animation */
+.breathe {
+    animation: breatheAnim 4.5s ease-in-out infinite;
+}
+
+@keyframes breatheAnim {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.025); }
+    100% { transform: scale(1); }
+}
+
+/* text shimmer */
+.text-shimmer {
+    background: linear-gradient(
+        100deg,
+        #9fb2d6 40%,
+        #ffffff 50%,
+        #9fb2d6 60%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmerMove 4s linear infinite;
+}
+
+@keyframes shimmerMove {
+    from { background-position: 0% center; }
+    to   { background-position: 200% center; }
+}
 
 /* ============================================================
-   END OF CSS (PANJANG, NIAT, AMAN)
-   ============================================================ */
+   PROJECT CARD MICRO INTERACTION
+============================================================ */
+.project-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at var(--x, 50%) var(--y, 50%),
+        rgba(78,161,255,0.18),
+        transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-card:hover::before {
+    opacity: 1;
+}
+
+/* pressed feedback */
+.project-card:active {
+    transform: scale(0.97);
+}
+
+/* ============================================================
+   ORGANIZATION FLIP ENHANCEMENT
+============================================================ */
+.flip-card {
+    transition: transform 0.3s ease;
+}
+
+.flip-card:hover {
+    transform: translateY(-6px);
+}
+
+.flip-front h3,
+.flip-back h3 {
+    margin-bottom: 10px;
+}
+
+.flip-back p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   AUTO SCROLL SMOOTHNESS
+============================================================ */
+.scroll-row {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* pause auto-scroll on touch */
+.scroll-row:active {
+    animation-play-state: paused;
+}
+
+/* ============================================================
+   SECTION TRANSITION FAKE DEPTH
+============================================================ */
+section {
+    position: relative;
+}
+
+section::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(255,255,255,0.08),
+        transparent
+    );
+}
+
+/* ============================================================
+   MOBILE BOTTOM PANEL
+============================================================ */
+.mobile-panel {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-panel {
+        display: flex;
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 32px);
+        max-width: 420px;
+        height: 64px;
+        background: rgba(10,18,40,0.85);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--border-glass);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+        z-index: 200;
+        justify-content: space-around;
+        align-items: center;
+        animation: panelSlideUp 0.6s ease;
+    }
+
+    @keyframes panelSlideUp {
+        from {
+            opacity: 0;
+            transform: translate(-50%, 40px);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    .mobile-panel a {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.3s ease;
+    }
+
+    .mobile-panel a:hover {
+        color: var(--text-main);
+    }
+
+    .mobile-panel a::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-panel a.active::before {
+        opacity: 1;
+    }
+}
+
+/* ============================================================
+   MOBILE PERFORMANCE OPTIMIZATION
+============================================================ */
+@media (max-width: 768px) {
+    * {
+        animation-duration: 0.9s !important;
+    }
+
+    .bg-orb {
+        filter: blur(55px);
+    }
+}
+
+/* ============================================================
+   EXTRA VISUAL POLISH
+============================================================ */
+::selection {
+    background: rgba(78,161,255,0.35);
+    color: #fff;
+}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* subtle page fade-in */
+html {
+    animation: pageIn 0.8s ease;
+}
+
+@keyframes pageIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ============================================================
+   END EXTENSION
+============================================================ */
+/* ============================================================
+   MOBILE PANEL ACTIVE DETECT SCROLL
+============================================================ */
+const sections = document.querySelectorAll("section[id]");
+const mobileLinks = document.querySelectorAll(".mobile-panel a");
+
+function setActiveLink() {
+  let scrollPos = window.scrollY + window.innerHeight * 0.4;
+
+  sections.forEach(section => {
+    const top = section.offsetTop;
+    const height = section.offsetHeight;
+    const id = section.getAttribute("id");
+
+    if (scrollPos >= top && scrollPos < top + height) {
+      mobileLinks.forEach(link => {
+        link.classList.toggle(
+          "active",
+          link.getAttribute("href") === `#${id}`
+        );
+      });
+    }
+  });
+}
+
+window.addEventListener("scroll", setActiveLink);
+
+/* ============================================================
+   ULTRA LIGHT PARALLAX ENGINE
+============================================================ */
+const parallaxItems = document.querySelectorAll(
+  ".hero-text, .hero-image, .project-card, .flip-card, section h2"
+);
+
+window.addEventListener("mousemove", e => {
+  const x = (window.innerWidth / 2 - e.clientX) / 40;
+  const y = (window.innerHeight / 2 - e.clientY) / 40;
+
+  parallaxItems.forEach(el => {
+    const depth = el.style.getPropertyValue("--depth") || 10;
+    el.style.transform = `translate3d(${x * depth * 0.08}px, ${y * depth * 0.08}px, 0)`;
+  });
+});
+
+/* ============================================================
+   PERFORMANCE AUDIT MODE (AUTO)
+============================================================ */
+(function detectPerf() {
+  let last = performance.now();
+  let frames = 0;
+
+  function check() {
+    frames++;
+    const now = performance.now();
+
+    if (now - last >= 1000) {
+      if (frames < 45) {
+        document.documentElement.setAttribute("data-perf", "low");
+        console.warn("⚠ PERFORMANCE MODE: LOW");
+      } else {
+        document.documentElement.removeAttribute("data-perf");
+      }
+      frames = 0;
+      last = now;
+    }
+    requestAnimationFrame(check);
+  }
+
+  requestAnimationFrame(check);
+})();
+/* ============================================================
+   GSAP-LEVEL MOTION SYSTEM (PURE CSS)
+============================================================ */
+
+:root {
+    --ease-smooth: cubic-bezier(.22,.61,.36,1);
+    --ease-elastic: cubic-bezier(.34,1.56,.64,1);
+    --motion-fast: 0.4s;
+    --motion-mid: 0.8s;
+    --motion-slow: 1.4s;
+}
+
+/* stagger illusion */
+.project-card,
+.flip-card {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+    animation: revealUp var(--motion-mid) var(--ease-smooth) forwards;
+}
+
+.project-card:nth-child(1){animation-delay:.1s}
+.project-card:nth-child(2){animation-delay:.2s}
+.project-card:nth-child(3){animation-delay:.3s}
+.project-card:nth-child(4){animation-delay:.4s}
+
+@keyframes revealUp {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================================
+   AUTO SCROLL SMART VISUAL STATE
+============================================================ */
+
+.project-grid,
+.flip-card-container {
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+}
+
+.project-grid.paused,
+.flip-card-container.paused {
+    scroll-behavior: auto;
+}
+
+/* ============================================================
+   TOUCH FEEDBACK
+============================================================ */
+.project-card:active,
+.flip-card:active {
+    transform: scale(0.97);
+    transition: transform 0.12s ease;
+}
+
+/* ============================================================
+   REDUCED MOTION AWARENESS (Lighthouse Friendly)
+============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ============================================================
+   PERFORMANCE HINTS
+============================================================ */
+.project-card,
+.flip-card,
+.hero-image img {
+    will-change: transform, opacity;
+}
+
+/* ============================================================
+   END GSAP CSS SYSTEM
+============================================================ */
