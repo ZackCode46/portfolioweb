@@ -399,3 +399,113 @@ window.addEventListener("load", () => {
 function experimentalAIHook() {
     // reserved
 }
+/* ============================================================
+   AI SCROLL HEATMAP (LIGHTWEIGHT)
+============================================================ */
+
+const heatmapData = [];
+const viewportHeight = window.innerHeight;
+
+window.addEventListener("scroll", () => {
+  const scrollY = window.scrollY;
+  const section = Math.floor(scrollY / viewportHeight);
+
+  heatmapData[section] = (heatmapData[section] || 0) + 1;
+}, { passive: true });
+
+/* expose data for AI UX */
+window.__USER_HEATMAP__ = heatmapData;
+/* ============================================================
+   AI PREDICTIVE PRELOAD
+============================================================ */
+
+function preloadImages(selector) {
+  document.querySelectorAll(selector).forEach(img => {
+    if (!img.dataset.preloaded) {
+      const i = new Image();
+      i.src = img.src;
+      img.dataset.preloaded = "true";
+    }
+  });
+}
+
+setInterval(() => {
+  const heatmap = window.__USER_HEATMAP__ || [];
+  const maxIndex = heatmap.indexOf(Math.max(...heatmap));
+
+  /* preload next section based on interest */
+  if (maxIndex === 1) preloadImages("#projects img");
+  if (maxIndex === 2) preloadImages("#organization img");
+  if (maxIndex === 3) preloadImages("#certificates img");
+}, 3000);
+/* ============================================================
+   GESTURE INERTIA (iOS-LIKE)
+============================================================ */
+
+function inertiaScroll(container) {
+  let velocity = 0;
+  let lastX = 0;
+  let pressed = false;
+
+  container.addEventListener("pointerdown", e => {
+    pressed = true;
+    velocity = 0;
+    lastX = e.clientX;
+    container.setPointerCapture(e.pointerId);
+  });
+
+  container.addEventListener("pointermove", e => {
+    if (!pressed) return;
+    const dx = lastX - e.clientX;
+    velocity = dx;
+    container.scrollLeft += dx;
+    lastX = e.clientX;
+  });
+
+  container.addEventListener("pointerup", () => {
+    pressed = false;
+    (function momentum() {
+      if (Math.abs(velocity) < 0.3) return;
+      container.scrollLeft += velocity;
+      velocity *= 0.95;
+      requestAnimationFrame(momentum);
+    })();
+  });
+}
+
+document.querySelectorAll(".project-grid, .flip-card-container")
+  .forEach(el => inertiaScroll(el));
+/* ============================================================
+   AI THEME AUTO ADAPT
+============================================================ */
+
+function applyTheme() {
+  const hour = new Date().getHours();
+  const root = document.documentElement;
+
+  if (hour >= 6 && hour < 17) {
+    /* DAY */
+    root.style.setProperty("--bg", "#f7f9fb");
+    root.style.setProperty("--text", "#0b0b0b");
+    root.style.setProperty("--card", "#ffffff");
+  } else {
+    /* NIGHT */
+    root.style.setProperty("--bg", "#0d1117");
+    root.style.setProperty("--text", "#e6edf3");
+    root.style.setProperty("--card", "#161b22");
+  }
+}
+
+applyTheme();
+setInterval(applyTheme, 60000);
+/* ============================================================
+   MICRO PARALLAX (GPU SAFE)
+============================================================ */
+
+window.addEventListener("scroll", () => {
+  const y = window.scrollY * 0.08;
+  document.querySelector(".hero-image img")?.style.setProperty(
+    "transform",
+    `translateY(${y}px)`
+  );
+}, { passive: true });
