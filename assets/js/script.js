@@ -314,6 +314,86 @@ function futureObserverSystem() {
 function animationRegulator() {
     // reserved
 }
+/* ============================================================
+   AUTO SCROLL SMART ENGINE
+============================================================ */
+function autoScroll(container, speed = 0.3) {
+  let paused = false;
+  let userInteracting = false;
+
+  container.addEventListener("mouseenter", () => paused = true, { passive: true });
+  container.addEventListener("mouseleave", () => paused = false, { passive: true });
+
+  container.addEventListener("touchstart", () => {
+    paused = true;
+    userInteracting = true;
+  }, { passive: true });
+
+  container.addEventListener("touchend", () => {
+    setTimeout(() => {
+      paused = false;
+      userInteracting = false;
+    }, 1200);
+  }, { passive: true });
+
+  function loop() {
+    if (!paused && !userInteracting) {
+      container.scrollLeft += speed;
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+        container.scrollLeft = 0;
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+}
+
+document.querySelectorAll(".project-grid, .flip-card-container")
+  .forEach(el => autoScroll(el));
+
+/* ============================================================
+   AI UX ENGINE (USER BEHAVIOR PREDICTION)
+============================================================ */
+let scrollEvents = [];
+let lastScroll = performance.now();
+
+window.addEventListener("scroll", () => {
+  const now = performance.now();
+  scrollEvents.push(now - lastScroll);
+  lastScroll = now;
+
+  if (scrollEvents.length > 20) scrollEvents.shift();
+}, { passive: true });
+
+function getUserScrollStyle() {
+  if (scrollEvents.length < 5) return "normal";
+  const avg = scrollEvents.reduce((a,b)=>a+b,0) / scrollEvents.length;
+
+  if (avg < 40) return "fast";
+  if (avg > 120) return "slow";
+  return "normal";
+}
+
+/* adapt UI */
+setInterval(() => {
+  const style = getUserScrollStyle();
+
+  document.documentElement.style.setProperty(
+    "--motion-mid",
+    style === "fast" ? "0.4s" : style === "slow" ? "1.2s" : "0.8s"
+  );
+}, 1500);
+
+/* ============================================================
+   LIGHTHOUSE TUNING
+============================================================ */
+
+/* passive listeners already used */
+/* layout shift prevention */
+window.addEventListener("load", () => {
+  document.body.classList.add("loaded");
+});
 
 // Placeholder AI hook
 function experimentalAIHook() {
